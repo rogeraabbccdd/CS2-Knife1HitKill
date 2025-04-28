@@ -1,4 +1,4 @@
-﻿using CounterStrikeSharp.API;
+using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Memory;
 using CounterStrikeSharp.API.Modules.Memory.DynamicFunctions;
@@ -15,12 +15,24 @@ public class Knife1HitKill : BasePlugin
 
     public override void Load(bool hotReload)
     {
-        VirtualFunctions.CBaseEntity_TakeDamageOldFunc.Hook(OnTakeDamage, HookMode.Pre);
+        RegisterListener<Listeners.OnMapStart>(OnMapStartHandler);
+        RegisterListener<Listeners.OnMapEnd>(OnMapEndHandler);
+        
     }
 
     public override void Unload(bool hotReload)
     {
         VirtualFunctions.CBaseEntity_TakeDamageOldFunc.Unhook(OnTakeDamage, HookMode.Pre);
+    }
+
+    private void OnMapEndHandler()
+    {
+        VirtualFunctions.CBaseEntity_TakeDamageOldFunc.Unhook(OnTakeDamage, HookMode.Pre);
+    }
+
+    private void OnMapStartHandler(string mapName)
+    {
+        VirtualFunctions.CBaseEntity_TakeDamageOldFunc.Hook(OnTakeDamage, HookMode.Pre);
     }
 
     private HookResult OnTakeDamage(DynamicHook hook)

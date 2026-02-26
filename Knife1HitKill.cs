@@ -17,31 +17,10 @@ public class Knife1HitKill : BasePlugin
 
     public override void Load(bool hotReload)
     {
-        RegisterListener<Listeners.OnMapStart>(OnMapStartHandler);
-        RegisterListener<Listeners.OnMapEnd>(OnMapEndHandler);
-        
+        RegisterListener<Listeners.OnEntityTakeDamagePre>(OnTakeDamage);
     }
-
-    public override void Unload(bool hotReload)
+    private HookResult OnTakeDamage(CEntityInstance entity, CTakeDamageInfo info)
     {
-        VirtualFunctions.CBaseEntity_TakeDamageOldFunc.Unhook(OnTakeDamage, HookMode.Pre);
-    }
-
-    private void OnMapEndHandler()
-    {
-        VirtualFunctions.CBaseEntity_TakeDamageOldFunc.Unhook(OnTakeDamage, HookMode.Pre);
-    }
-
-    private void OnMapStartHandler(string mapName)
-    {
-        VirtualFunctions.CBaseEntity_TakeDamageOldFunc.Hook(OnTakeDamage, HookMode.Pre);
-    }
-
-    private HookResult OnTakeDamage(DynamicHook hook)
-    {
-        CEntityInstance entity = hook.GetParam<CEntityInstance>(0);
-        CTakeDamageInfo info = hook.GetParam<CTakeDamageInfo>(1);
-
         if (
             entity is null || !entity.IsValid || !info.Attacker.IsValid || info.Attacker.Value is null || info.Ability.Value is null ||
             entity.DesignerName != "player" || info.Attacker.Value.DesignerName != "player" ||

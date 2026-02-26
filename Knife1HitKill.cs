@@ -10,7 +10,7 @@ namespace Knife1HitKill;
 public class Knife1HitKill : BasePlugin
 {
     public override string ModuleName => "Knife 1 Hit Kill";
-    public override string ModuleVersion => "1.0.0";
+    public override string ModuleVersion => "1.0.2";
     public override string ModuleAuthor => "Kento";
     public override string ModuleDescription => "Knife 1 Hit Kill";
     private ConVar? mp_teammates_are_enemies = ConVar.Find("mp_teammates_are_enemies");
